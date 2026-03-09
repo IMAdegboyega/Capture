@@ -1,4 +1,5 @@
 import { Navbar } from "@/components";
+import AuthGuard from "@/components/AuthGuard";
 
 const RootLayout = ({
   children,
@@ -6,10 +7,10 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div>
+    <AuthGuard>
       <Navbar />
       {children}
-    </div>
+    </AuthGuard>
   );
 };
 

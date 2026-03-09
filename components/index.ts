@@ -1,3 +1,4 @@
+export { default as AuthGuard } from "./AuthGuard";
 export { default as Navbar } from "./Navbar";
 export { default as VideoCard } from "./VideoCard";
 export { default as ImageWithFallback } from "./ImageWithFallback";
