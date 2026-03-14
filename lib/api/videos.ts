@@ -9,8 +9,6 @@ interface CloudinaryUploadParams {
   api_key: string;
   cloud_name: string;
   folder: string;
-  resource_type?: string;
-  auto_transcription?: string;
 }
 
 interface VideoData {
@@ -83,20 +81,17 @@ async function uploadToCloudinary(
   formData.append("api_key", params.api_key);
   formData.append("folder", params.folder);
 
-  if (params.resource_type) {
-    formData.append("resource_type", params.resource_type);
-  }
-  if (params.auto_transcription) {
-    formData.append("auto_transcription", params.auto_transcription);
-  }
-
   const response = await fetch(params.upload_url, {
     method: "POST",
     body: formData,
   });
 
   if (!response.ok) {
-    throw new Error(`Cloudinary upload failed: ${response.status}`);
+    const errorData = await response.json().catch(() => ({}));
+    console.error("Cloudinary upload error:", errorData);
+    throw new Error(
+      errorData?.error?.message || `Cloudinary upload failed: ${response.status}`
+    );
   }
 
   return response.json();
