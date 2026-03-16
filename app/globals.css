@@ -597,16 +597,54 @@
   .video-player {
     @apply relative aspect-video w-full rounded-2xl bg-[#000] flex-none;
 
-    div {
-      @apply absolute inset-0 flex items-center justify-center bg-gray-900 rounded-2xl;
-
-      p {
-        @apply text-white text-lg font-semibold;
-      }
-    }
-
     iframe {
       @apply absolute inset-0 h-full w-full rounded-2xl;
+    }
+  }
+
+  .processing-state {
+    @apply absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gray-900 rounded-2xl px-6 text-center;
+
+    h3 {
+      @apply text-white text-lg font-semibold -tracking-[0.5px];
+    }
+
+    p {
+      @apply text-gray-400 text-sm font-normal max-w-xs;
+    }
+  }
+
+  .processing-spinner {
+    @apply size-10 rounded-full border-4 border-gray-600 border-t-blue-100;
+    animation: spin 0.9s linear infinite;
+  }
+
+  .processing-bar {
+    @apply w-full max-w-xs h-1 bg-gray-700 rounded-full overflow-hidden;
+  }
+
+  .processing-bar-fill {
+    @apply h-full bg-blue-100 rounded-full;
+    animation: indeterminate 1.6s ease-in-out infinite;
+  }
+
+  @keyframes indeterminate {
+    0% {
+      transform: translateX(-100%);
+      width: 40%;
+    }
+    50% {
+      width: 60%;
+    }
+    100% {
+      transform: translateX(260%);
+      width: 40%;
+    }
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
     }
   }
 

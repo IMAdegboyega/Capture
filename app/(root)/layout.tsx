@@ -1,5 +1,6 @@
 import { Navbar } from "@/components";
 import AuthGuard from "@/components/AuthGuard";
+import PageTransition from "@/components/PageTransition";
 
 const RootLayout = ({
   children,
@@ -9,7 +10,7 @@ const RootLayout = ({
   return (
     <AuthGuard>
       <Navbar />
-      {children}
+      <PageTransition>{children}</PageTransition>
     </AuthGuard>
   );
 };

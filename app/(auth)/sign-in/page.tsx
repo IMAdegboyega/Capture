@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
 const GOOGLE_REDIRECT_URI =
@@ -24,7 +25,12 @@ const SignIn = () => {
 
   return (
     <main className="sign-in">
-      <aside className="testimonial">
+      <motion.aside
+        className="testimonial"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
+      >
         <Link href="/">
           <Image
             src="/assets/icons/logo.svg"
@@ -69,8 +75,13 @@ const SignIn = () => {
           </section>
         </div>
         <p>© capture 2026</p>
-      </aside>
-      <aside className="google-sign-in">
+      </motion.aside>
+      <motion.aside
+        className="google-sign-in"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.35, ease: "easeOut", delay: 0.05 }}
+      >
         <section>
           <Link href="/">
             <Image
@@ -86,7 +97,10 @@ const SignIn = () => {
             time!
           </p>
 
-          <button onClick={handleGoogleSignIn}>
+          <button
+            onClick={handleGoogleSignIn}
+            className="transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.97]"
+          >
             <Image
               src="/assets/icons/google.svg"
               alt="Google Icon"
@@ -96,7 +110,7 @@ const SignIn = () => {
             <span>Sign in with Google</span>
           </button>
         </section>
-      </aside>
+      </motion.aside>
       <div className="overlay" />
     </main>
   );

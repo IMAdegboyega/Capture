@@ -46,7 +46,24 @@ const VideoPage = () => {
   if (isLoading || !videoData) {
     return (
       <main className="wrapper page">
-        <p>Loading video...</p>
+        {/* Header skeleton */}
+        <div className="animate-pulse flex flex-col gap-2.5">
+          <div className="h-8 w-2/3 rounded-lg bg-gray-200 dark:bg-gray-700" />
+          <div className="h-4 w-48 rounded bg-gray-100 dark:bg-gray-600" />
+        </div>
+
+        {/* Video + sidebar skeleton */}
+        <section className="video-details">
+          <div className="content">
+            {/* 16/9 video placeholder */}
+            <div className="animate-pulse aspect-video w-full rounded-2xl bg-gray-200 dark:bg-gray-700" />
+          </div>
+          <div className="animate-pulse flex flex-col gap-4 lg:max-w-[350px] xl:max-w-[410px] w-full">
+            <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+            <div className="h-4 w-5/6 rounded bg-gray-200 dark:bg-gray-700" />
+            <div className="h-4 w-4/6 rounded bg-gray-100 dark:bg-gray-600" />
+          </div>
+        </section>
       </main>
     );
   }

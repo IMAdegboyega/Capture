@@ -7,6 +7,7 @@ import {
   getVideoProcessingStatus,
 } from "@/lib/api/videos";
 import { initialVideoState } from "@/constants";
+import toast from "react-hot-toast";
 
 const VideoPlayer = ({ videoId, className }: VideoPlayerProps) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -44,6 +45,7 @@ const VideoPlayer = ({ videoId, className }: VideoPlayerProps) => {
           setState((prev) => ({ ...prev, hasIncrementedView: true }));
         } catch (error) {
           console.error("Failed to increment view count:", error);
+          toast.error("Failed to record view");
         }
       };
 
@@ -54,8 +56,13 @@ const VideoPlayer = ({ videoId, className }: VideoPlayerProps) => {
   return (
     <div className={cn("video-player", className)}>
       {state.isProcessing ? (
-        <div>
-          <p>Processing video...</p>
+        <div className="processing-state">
+          <div className="processing-spinner" />
+          <h3>Processing your video</h3>
+          <p>This usually takes a few moments. The page will update automatically.</p>
+          <div className="processing-bar">
+            <div className="processing-bar-fill" />
+          </div>
         </div>
       ) : (
         <iframe

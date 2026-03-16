@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { loginWithGoogle } from "@/lib/api/auth";
 import { useAuth } from "@/lib/auth-context";
+import toast from "react-hot-toast";
 
 const GoogleCallbackContent = () => {
   const router = useRouter();
@@ -26,7 +27,9 @@ const GoogleCallbackContent = () => {
         router.replace("/");
       } catch (err) {
         console.error("Google login failed:", err);
-        setError("Authentication failed. Please try again.");
+        const msg = "Authentication failed. Please try again.";
+        setError(msg);
+        toast.error(msg);
         setTimeout(() => router.replace("/sign-in"), 3000);
       }
     };

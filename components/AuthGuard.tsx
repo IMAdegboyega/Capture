@@ -17,7 +17,7 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p>Loading...</p>
+        <div className="size-8 rounded-full border-2 border-gray-200 border-t-blue-100 animate-spin" />
       </div>
     );
   }

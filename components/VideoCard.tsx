@@ -28,7 +28,7 @@ const VideoCard = ({
   };
 
   return (
-    <Link href={`/video/${id}`} className="video-card">
+    <Link href={`/video/${id}`} className="video-card transition-shadow duration-200 hover:shadow-lg">
       <Image
         src={thumbnail}
         width={290}
@@ -70,7 +70,10 @@ const VideoCard = ({
           })}
         </h2>
       </article>
-      <button onClick={handleCopy} className="copy-btn">
+      <button
+        onClick={handleCopy}
+        className="copy-btn transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.97]"
+      >
         <Image
           src={
             copied ? "/assets/icons/checkmark.svg" : "/assets/icons/link.svg"
@@ -78,6 +81,7 @@ const VideoCard = ({
           alt="Copy Link"
           width={18}
           height={18}
+          className="transition-transform duration-150"
         />
       </button>
       {duration && (

@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <header className="navbar">
       <nav>
-        <Link href="/">
+        <Link href="/" className="transition-opacity duration-150 hover:opacity-80">
           <Image
             src="/assets/icons/logo.svg"
             alt="SnapChat Logo"
@@ -25,7 +25,10 @@ const Navbar = () => {
 
         {user && (
           <figure>
-            <button onClick={() => router.push(`/profile/${user.id}`)}>
+            <button
+              onClick={() => router.push(`/profile/${user.id}`)}
+              className="transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.97]"
+            >
               <ImageWithFallback
                 src={user.image ?? ""}
                 alt="User"
@@ -39,14 +42,14 @@ const Navbar = () => {
                 signOut();
                 router.push("/sign-in");
               }}
-              className="cursor-pointer"
+              className="cursor-pointer transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.97]"
             >
               <Image
                 src="/assets/icons/logout.svg"
                 alt="logout"
                 width={24}
                 height={24}
-                className="rotate-180"
+                className="rotate-180 transition-transform duration-150"
               />
             </button>
           </figure>

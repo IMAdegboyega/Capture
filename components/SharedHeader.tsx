@@ -90,12 +90,16 @@ const SharedHeader = ({ subHeader, title, userImg }: SharedHeaderProps) => {
           </article>
         </figure>
         <aside>
-          <Link href="/upload">
+          <Link
+            href="/upload"
+            className="transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.97]"
+          >
             <Image
               src="/assets/icons/upload.svg"
               alt="upload"
               width={16}
               height={16}
+              className="transition-transform duration-150"
             />
             <span>Upload a video</span>
           </Link>
@@ -109,6 +113,7 @@ const SharedHeader = ({ subHeader, title, userImg }: SharedHeaderProps) => {
             placeholder="Search for videos, tags, folders..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            className="transition-all duration-150 focus:ring-2 focus:ring-offset-1"
           />
           <Image
             src="/assets/icons/search.svg"

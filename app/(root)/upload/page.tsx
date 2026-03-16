@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import { FileInput, FormField } from "@/components";
 import { useFileInput } from "@/lib/hooks/useFileInput";
 import { MAX_THUMBNAIL_SIZE, MAX_VIDEO_SIZE } from "@/constants";
+import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 const UploadPage = () => {
   const router = useRouter();
@@ -75,20 +77,26 @@ const UploadPage = () => {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError(null);
 
+    if (!video.file || !thumbnail.file) {
+      const msg = "Please upload video and thumbnail files.";
+      setError(msg);
+      toast.error(msg);
+      return;
+    }
+
+    if (!formData.title || !formData.description) {
+      const msg = "Please fill in all required fields.";
+      setError(msg);
+      toast.error(msg);
+      return;
+    }
+
+    setIsSubmitting(true);
+    const uploadToast = toast.loading("Uploading video...");
+
     try {
-      if (!video.file || !thumbnail.file) {
-        setError("Please upload video and thumbnail files.");
-        return;
-      }
-
-      if (!formData.title || !formData.description) {
-        setError("Please fill in all required fields.");
-        return;
-      }
-
       // Upload video directly to Cloudinary (signed upload)
       const videoResult = await uploadVideo(video.file);
       const videoPublicId = videoResult.public_id;
@@ -106,10 +114,13 @@ const UploadPage = () => {
           : videoDuration,
       });
 
+      toast.success("Video uploaded successfully!", { id: uploadToast });
       router.push(`/video/${videoPublicId}`);
     } catch (error) {
       console.error("Error submitting form:", error);
-      setError("Upload failed. Please try again.");
+      const msg = "Upload failed. Please try again.";
+      setError(msg);
+      toast.error(msg, { id: uploadToast });
     } finally {
       setIsSubmitting(false);
     }
@@ -119,9 +130,12 @@ const UploadPage = () => {
     <main className="wrapper-md upload-page">
       <h1>Upload a video</h1>
       {error && <div className="error-field">{error}</div>}
-      <form
+      <motion.form
         className="rounded-20 gap-6 w-full flex flex-col shadow-10 px-5 py-7.5"
         onSubmit={onSubmit}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
       >
         <FormField
           id="title"
@@ -176,10 +190,14 @@ const UploadPage = () => {
           ]}
         />
 
-        <button type="submit" disabled={isSubmitting} className="submit-button">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="submit-button transition-all duration-150 ease-out hover:scale-[1.02] active:scale-[0.97] disabled:hover:scale-100"
+        >
           {isSubmitting ? "Uploading..." : "Upload Video"}
         </button>
-      </form>
+      </motion.form>
     </main>
   );
 };

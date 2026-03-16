@@ -3,6 +3,7 @@ import { Karla } from "next/font/google";
 import "./globals.css";
 import { satoshi } from "../fonts/font";
 import { AuthProvider } from "@/lib/auth-context";
+import ToastProvider from "@/components/ToastProvider";
 
 const geistKarla = Karla({
   variable: "--font-geist-karla",
@@ -28,6 +29,7 @@ export default function Layout({
         className={`${geistKarla.variable} ${satoshi.variable} font-karla antialiased`}
       >
         <AuthProvider>{children}</AuthProvider>
+        <ToastProvider />
       </body>
     </html>
   );

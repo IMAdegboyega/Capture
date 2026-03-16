@@ -4,6 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { EmptyState, Pagination, SharedHeader, VideoCard } from "@/components";
 import { getAllVideos } from "@/lib/api/videos";
+import { AnimatePresence, motion } from "framer-motion";
+import VideoGridSkeleton from "@/components/VideoGridSkeleton";
 
 interface VideoData {
   video: {
@@ -29,6 +31,22 @@ interface PaginationData {
   total_videos: number;
   page_size: number;
 }
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.06 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3, ease: "easeOut" },
+  },
+};
 
 const HomePageContent = () => {
   const searchParams = useSearchParams();
@@ -57,43 +75,62 @@ const HomePageContent = () => {
     fetchVideos();
   }, [query, filter, page]);
 
-  if (isLoading) {
-    return (
-      <main className="wrapper page">
-        <SharedHeader subHeader="Public Library" title="All Videos" />
-        <p>Loading videos...</p>
-      </main>
-    );
-  }
-
   return (
     <main className="wrapper page">
       <SharedHeader subHeader="Public Library" title="All Videos" />
 
-      {videos?.length > 0 ? (
-        <section className="video-grid">
-          {videos.map(({ video, user }) => (
-            <VideoCard
-              key={video.id}
-              id={video.video_id}
-              title={video.title}
-              thumbnail={video.thumbnail_url}
-              createdAt={new Date(video.created_at)}
-              userImg={user?.image ?? ""}
-              username={user?.name ?? "Guest"}
-              views={video.views}
-              visibility={video.visibility as Visibility}
-              duration={video.duration}
-            />
-          ))}
-        </section>
-      ) : (
-        <EmptyState
-          icon="/assets/icons/video.svg"
-          title="No Videos Found"
-          description="Try adjusting your search."
-        />
-      )}
+      <AnimatePresence mode="wait">
+        {isLoading ? (
+          <motion.div
+            key="loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            <VideoGridSkeleton />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
+            {videos?.length > 0 ? (
+              <motion.section
+                className="video-grid"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                {videos.map(({ video, user }) => (
+                  <motion.div key={video.id} variants={itemVariants}>
+                    <VideoCard
+                      id={video.video_id}
+                      title={video.title}
+                      thumbnail={video.thumbnail_url}
+                      createdAt={new Date(video.created_at)}
+                      userImg={user?.image ?? ""}
+                      username={user?.name ?? "Guest"}
+                      views={video.views}
+                      visibility={video.visibility as Visibility}
+                      duration={video.duration}
+                    />
+                  </motion.div>
+                ))}
+              </motion.section>
+            ) : (
+              <EmptyState
+                icon="/assets/icons/video.svg"
+                title="No Videos Found"
+                description="Try adjusting your search."
+              />
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {pagination && pagination.total_pages > 1 && (
         <Pagination

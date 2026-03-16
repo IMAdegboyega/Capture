@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { visibilities } from "@/constants";
 import DropdownList from "./DropdownList";
 import ImageWithFallback from "./ImageWithFallback";
+import toast from "react-hot-toast";
 
 const VideoDetailHeader = ({
   title,
@@ -34,9 +35,11 @@ const VideoDetailHeader = ({
     try {
       setIsDeleting(true);
       await deleteVideo(videoId);
+      toast.success("Video deleted");
       router.push("/");
     } catch (error) {
       console.error("Error deleting video:", error);
+      toast.error("Failed to delete video");
     } finally {
       setIsDeleting(false);
     }
@@ -48,8 +51,10 @@ const VideoDetailHeader = ({
       try {
         await updateVideoVisibility(videoId, option as Visibility);
         setVisibilityState(option as Visibility);
+        toast.success("Visibility updated");
       } catch (error) {
         console.error("Error updating visibility:", error);
+        toast.error("Failed to update visibility");
       } finally {
         setIsUpdating(false);
       }
@@ -59,6 +64,7 @@ const VideoDetailHeader = ({
   const copyLink = () => {
     navigator.clipboard.writeText(`${window.location.origin}/video/${videoId}`);
     setCopied(true);
+    toast.success("Link copied!");
   };
 
   const TriggerVisibility = (
